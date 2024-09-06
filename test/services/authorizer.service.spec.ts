@@ -10,7 +10,7 @@ import { Transaction } from "../../src/model/transaction";
 describe("AuthorizerService", () => {
   let authorizerService: AuthorizerService;
   let balanceService: BalanceService;
-  let merchantMCCMapping: MerchantMapping;
+  let merchantMapping: MerchantMapping;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -35,7 +35,7 @@ describe("AuthorizerService", () => {
 
     authorizerService = module.get<AuthorizerService>(AuthorizerService);
     balanceService = module.get<BalanceService>(BalanceService);
-    merchantMCCMapping = module.get<MerchantMapping>(MerchantMapping);
+    merchantMapping = module.get<MerchantMapping>(MerchantMapping);
   });
 
   it("should authorize transaction with valid MCC and sufficient funds", () => {
@@ -48,8 +48,8 @@ describe("AuthorizerService", () => {
       mcc: "5812",
     };
 
-    merchantMCCMapping.getMCC = jest.fn().mockReturnValue("1234");
-    merchantMCCMapping.returnCategoryFromMCC = jest.fn().mockReturnValue("CATEGORY");
+    merchantMapping.getMCC = jest.fn().mockReturnValue("1234");
+    merchantMapping.returnCategoryFromMCC = jest.fn().mockReturnValue("CATEGORY");
     balanceService.debitTransaction = jest.fn().mockReturnValue(true);
 
     const result = authorizerService.sendTransaction(transaction);
@@ -72,11 +72,11 @@ describe("AuthorizerService", () => {
       mcc: "5812",
     };
 
-    merchantMCCMapping.getMCC = jest.fn().mockReturnValue("5678");
-    merchantMCCMapping.returnCategoryFromMCC = jest
+    merchantMapping.getMCC = jest.fn().mockReturnValue("5678");
+    merchantMapping.returnCategoryFromMCC = jest
       .fn()
       .mockReturnValue(TransactionCategory.CASH);
-    merchantMCCMapping.validateIfCategoryIsCach = jest.fn().mockReturnValue(true);
+    merchantMapping.validateIfCategoryIsCach = jest.fn().mockReturnValue(true);
     balanceService.debitTransaction = jest.fn().mockReturnValue(true);
 
     const result = authorizerService.sendTransaction(transaction);
@@ -99,10 +99,10 @@ describe("AuthorizerService", () => {
       mcc: "5812",
     };
 
-    merchantMCCMapping.getMCC = jest.fn().mockReturnValue("9101");
-    merchantMCCMapping.returnCategoryFromMCC = jest.fn().mockReturnValue("CATEGORY");
+    merchantMapping.getMCC = jest.fn().mockReturnValue("9101");
+    merchantMapping.returnCategoryFromMCC = jest.fn().mockReturnValue("CATEGORY");
     balanceService.debitTransaction = jest.fn().mockReturnValue(false);
-    merchantMCCMapping.validateIfCategoryIsCach = jest.fn().mockReturnValue(false);
+    merchantMapping.validateIfCategoryIsCach = jest.fn().mockReturnValue(false);
 
     const result = authorizerService.sendTransaction(transaction);
 

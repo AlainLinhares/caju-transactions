@@ -4,10 +4,10 @@ import { MerchantMapping } from "../../src/utils/merchant.mapping";
 
 describe("BalanceService", () => {
   let balanceService: BalanceService;
-  let merchantMCCMapping: MerchantMapping;
+  let merchantMapping: MerchantMapping;
 
   beforeEach(async () => {
-    merchantMCCMapping = {
+    merchantMapping = {
       mapMCCToCategory: jest.fn(),
     } as any; // Mocking MerchantMapping
 
@@ -16,7 +16,7 @@ describe("BalanceService", () => {
         BalanceService,
         {
           provide: MerchantMapping,
-          useValue: merchantMCCMapping,
+          useValue: merchantMapping,
         },
       ],
     }).compile();
@@ -29,7 +29,7 @@ describe("BalanceService", () => {
     const amount = 100;
     const totalAmount = 200;
 
-    merchantMCCMapping.returnCategoryFromMCC = jest.fn().mockReturnValue(category);
+    merchantMapping.returnCategoryFromMCC = jest.fn().mockReturnValue(category);
 
     balanceService.getAvailableBalance = jest.fn().mockReturnValue(totalAmount);
 
@@ -48,7 +48,7 @@ describe("BalanceService", () => {
     const amount = 50;
     const totalAmount = 100;
 
-    merchantMCCMapping.returnCategoryFromMCC = jest.fn().mockReturnValue(category);
+    merchantMapping.returnCategoryFromMCC = jest.fn().mockReturnValue(category);
 
     balanceService.getAvailableBalance = jest.fn().mockReturnValue(50);
 
@@ -67,7 +67,7 @@ describe("BalanceService", () => {
     const amount = 100;
     const totalAmount = 50;
 
-    merchantMCCMapping.returnCategoryFromMCC = jest.fn().mockReturnValue(category);
+    merchantMapping.returnCategoryFromMCC = jest.fn().mockReturnValue(category);
 
     balanceService.getAvailableBalance = jest.fn().mockReturnValue(150);
 
