@@ -9,24 +9,24 @@ import { BalanceService } from "../service/balance.service";
 @Injectable()
 export class AuthorizerService {
   private readonly balanceService: BalanceService;
-  private readonly merchantMCCMapping: MerchantMapping;
+  private readonly merchantMapping: MerchantMapping;
 
   constructor(
     balanceService: BalanceService,
-    merchantMCCMapping: MerchantMapping
+    merchantMapping: MerchantMapping
   ) {
     this.balanceService = balanceService;
-    this.merchantMCCMapping = merchantMCCMapping;
+    this.merchantMapping = merchantMapping;
   }
 
   public sendTransaction(transaction: Transaction): Record<string, string> {
     const response: Record<string, string> = {};
 
-    const mcc = this.merchantMCCMapping.getMCC(
+    const mcc = this.merchantMapping.getMCC(
       transaction.merchant,
       transaction.mcc
     );
-    const category = this.merchantMCCMapping.returnCategoryFromMCC(mcc);
+    const category = this.merchantMapping.returnCategoryFromMCC(mcc);
 
     if (
       this.balanceService.debitTransaction(
@@ -37,7 +37,7 @@ export class AuthorizerService {
     ) {
       response["code"] = AuthorizationCode.APPROVED;
     } else if (
-      this.merchantMCCMapping.validateIfCategoryIsCach(category) ||
+      this.merchantMapping.validateIfCategoryIsCach(category) ||
       this.balanceService.debitTransaction(
         TransactionCategory.CASH,
         transaction.amount,
