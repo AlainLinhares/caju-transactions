@@ -14,6 +14,8 @@
 
 ### Questão aberta
 ###### Transações simultâneas: dado que o mesmo cartão de crédito pode ser utilizado em diferentes serviços online, existe uma pequena mas existente probabilidade de ocorrerem duas transações ao mesmo tempo. O que você faria para garantir que apenas uma transação por conta fosse processada em um determinado momento? Esteja ciente do fato de que todas as solicitações de transação são síncronas e devem ser processadas rapidamente (menos de 100 ms), ou a transação atingirá o timeout.
-   Para o cenário proposto acredito que duas soluções poderiam ser consideradas: 
-- A primeira opção seria o uso do Redis (a partir de locks de memória) principalmente por ter uma baixa latência e uma capacidade de gerenciamento automático de expiração de chaves. O que influencia positivamente para o tempo de resposta requerido. 
-- A segunda opção seria implementar um objeto typescript para gerenciar locks em memória como por exemplo, o uso da biblioteca mutex.
+   Para lidar com transações simultâneas de forma eficaz, garantindo que apenas uma transação por conta seja processada a qualquer momento, alguns cenários podem ser considerados: 
+- Bloqueio em Memória (Mutex). 
+- Uso de uma Fila de Mensagens
+- Controle de Concorrência em Banco de Dados
+- Solução Híbrida: uma abordagem híbrida pode ser implementada, combinando mutex em memória para transações rápidas e um sistema de fila para balancear cargas em situações de alta concorrência.
